@@ -1,0 +1,5 @@
+{
+	"sessionCookie": "cookie parameter of the account the monitor",
+	"accountName": "name of the account to monitor",
+	"notificationEmail" : "email adresse where you wish to get notification"
+}
