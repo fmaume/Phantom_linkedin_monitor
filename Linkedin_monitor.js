@@ -10,10 +10,6 @@ const Nick = require("nickjs")
 const nick = new Nick({
 	loadImages: true,
 	userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:54.0) Gecko/20100101 Firefox/54.0",
-	printPageErrors: false,
-	printResourceErrors: false,
-	printNavigation: false,
-	printAborts: false,
 })
 
 const StoreUtilities = require("./lib-StoreUtilities")
@@ -24,7 +20,13 @@ const linkedIn = new LinkedIn(nick, buster, utils)
 /* global jQuery  */
 
 // }
-
+async function random_wait(tab){
+//get random number from 1 to 10
+random_number = Math.floor((Math.random() * 10) + 1)
+await tab.scroll(0,random_number)
+await tab.scroll(0,-random_number)
+await tab.wait(random_number*1000)
+}
 
 const get_n_notification = (arg, done) => {
 
@@ -80,10 +82,13 @@ const arg = buster.argument
 
 tab = await nick.newTab()
 try {
-await linkedIn.login(tab, arg.sessionCookie, "https://www.linkedin.com/")
-
-
+await linkedIn.login(tab, arg.sessionCookie)
+//await tab.open("https://www.linkedin.com/feed/")
+    
+    console.log("loaded main page")
+    await tab.wait(5000)
     //check that notification panel is visible
+    await random_wait(tab)
     
     const pageTimeout = 5000
     
@@ -96,19 +101,23 @@ await linkedIn.login(tab, arg.sessionCookie, "https://www.linkedin.com/")
         selectors = "#notifications-nav-item"
         await tab.waitUntilVisible(selectors, pageTimeout)
         const notification_count = await tab.evaluate(get_n_notification, arg)
+        console.log(notification_count)
         
         selectors = "#messaging-nav-item"
         await tab.waitUntilVisible(selectors, pageTimeout)
         const message_count = await tab.evaluate(get_n_message , arg)
+        console.log(message_count)
         
         selectors = "#mynetwork-nav-item"
         await tab.waitUntilVisible(selectors, pageTimeout)
         const network_count = await tab.evaluate(get_n_network_not, arg)
+        console.log(network_count)
         
         const subject = "Linkedin status : " + arg.accountName
         const text = notification_count + ", " + message_count +", " + network_count
         const to = arg.notificationEmail
         await buster.mail(subject, text, to)
+        console.log("email sent")
         
         nick.exit()
 
