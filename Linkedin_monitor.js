@@ -133,6 +133,8 @@ await linkedIn.login(tab, arg.sessionCookie)
     const subject = "Linkedin cookie error: " + arg.accountName
     const text = err +" for the following account" + arg.accountName
     const to = arg.notificationEmail
+    await buster.mail(subject, text, to)
+
    
    nick.exit()
 }
