@@ -112,9 +112,9 @@ await linkedIn.login(tab, arg.sessionCookie)
         const network_count = await tab.evaluate(get_n_network_not, arg)
         console.log(network_count)
         
-        const subject = "Linkedin status : " + arg.accountName
-        const text = notification_count + ", " + message_count +", " + network_count
-        const to = arg.notificationEmail
+        subject = "Linkedin status : " + arg.accountName
+        text = notification_count + ", " + message_count +", " + network_count
+        to = arg.notificationEmail
         await buster.mail(subject, text, to)
         console.log("email sent")
         
@@ -130,9 +130,9 @@ await linkedIn.login(tab, arg.sessionCookie)
    console.log("Oh no! Even after 5s, the element was still not visible:", err) 
    
    //send email notification that the cokie is no more valide
-    const subject = "Linkedin cookie error: " + arg.accountName
-    const text = err +" for the following account" + arg.accountName
-    const to = arg.notificationEmail
+    subject = "Linkedin cookie error: " + arg.accountName
+    text = err +" for the following account" + arg.accountName
+    to = arg.notificationEmail
     await buster.mail(subject, text, to)
 
    
